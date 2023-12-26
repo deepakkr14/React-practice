@@ -1,58 +1,67 @@
 import React, { useState } from "react";
-import "./Chart.css";
+import "./Form.css";
+
+import Modal from "./modal";
+// import Card from "./Card";
 
 const Form = (props) => {
-  const [Username, setTitle] = useState("");
-  const [Age, setAmount] = useState("");
+  const [Username, setName] = useState("");
+  const [Age, setAge] = useState("");
+  const [error, setErr] = useState();
   let id = Math.random();
 
-  const namehandler = (e) => setTitle(e.target.value);
 
-  const Agehandler = (e) => setAmount(e.target.value);
   const UserData = {
     id: id,
     Username: Username,
     Age: Age,
   };
-  const makechange = () => {
-    if (Age<0) {
-      props.error({msg:'enter a valid age'});
+
+  const Submit = (e) => {
+    e.preventDefault();
+    if (Age < 0) {
+      setErr({ show: "enter a valid age" });
+      return;
+    } else if (Age.trim().length === 0 || Username.trim().length === 0) {
+      setErr({ show: "Please enter a valid value." });
+      return;
     }
-    else if(Age.trim().length===0 || Username.trim().length===0){
-      props.error({msg:'please enter a valid value'});
-    }
-    // console.log(UserData);
-    // console.log(props.)
-   else{ props.func(UserData)
-    setAmount("");
-    setTitle("");}
-    //  props.onaddExpense(UserData)
+
+    props.func(UserData);
+    setAge("");
+    setName("");
   };
+  const namehandler = (e) => setName(e.target.value);
 
-  //   const cancel=()=>{
-  // props.cancel(false)
-  //   }
+  const Agehandler = (e) => setAge(e.target.value);
+
+  const closeHandler = () => {
+    setErr(false);
+  };
   return (
-    <div className="expenses-list">
-     <label >User name</label> 
-      <input
-        type="text"
-        placeholder="Username"
-        value={Username}
-        onChange={namehandler}
-      />
-      <br></br>
-     <label> Age (year)</label>
-      <input
-        type="number"
-        placeholder="Age"
-        value={Age}
-        onChange={Agehandler}
-      />
-      <br></br>
-      <button onClick={makechange}>Add User</button>
+    <div>
+      {error && <Modal msg={error} toggle={closeHandler} />}
+      <div className="form-content">
+        <label >User name</label>
+        <br />
+        <input
+          type="text"
+          placeholder="Username"
+          value={Username}
+          onChange={namehandler}
+        />
+        <br/>
+        <label> Age (year)</label>
+        <input
+          type="number"
+          placeholder="Age"
+          value={Age}
+          onChange={Agehandler}
+        />
+        <br></br>
 
-     {/* <div><Users  /></div>  */}
+        <button onClick={Submit}>Add User</button>
+      </div>
     </div>
   );
 };

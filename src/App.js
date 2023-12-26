@@ -4,7 +4,6 @@ import Form from "./component/Form";
 import Users from "./component/Users";
 
 import { useState } from "react";
-
 const App = () => {
   const [UserData, setData] = useState([]);
 
@@ -12,16 +11,11 @@ const App = () => {
     setData((pdata) => {
       return [...pdata, data];
     });
+  };
 
-    console.log(UserData);
-  };
-  const err = (data) => {
-    alert(data.msg);
-  };
   return (
     <div>
-      <Form func={status} error={err} />
-
+      <Form func={status} />
       <Users data={UserData} />
     </div>
   );
